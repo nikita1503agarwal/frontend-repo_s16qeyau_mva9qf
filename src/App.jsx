@@ -3,6 +3,7 @@ import Hero from './components/Hero'
 import Features from './components/Features'
 import ScrollStory from './components/ScrollStory'
 import WorkflowCanvas from './components/WorkflowCanvas'
+import SectionPin from './components/SectionPin'
 import CTA from './components/CTA'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Hero />
         <Features />
         <ScrollStory />
+        <SectionPin />
         <WorkflowCanvas />
         <CTA />
       </main>

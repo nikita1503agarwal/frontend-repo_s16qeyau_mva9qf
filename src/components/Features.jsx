@@ -1,4 +1,4 @@
-import { Bot, PhoneCall, Workflow, Zap, MessageSquare, ShieldCheck, Mic, Infinity } from 'lucide-react'
+import { Bot, PhoneCall, Workflow, Zap, MessageSquare, ShieldCheck } from 'lucide-react'
 
 const features = [
   {
@@ -37,6 +37,7 @@ export default function Features() {
   return (
     <section id="solutions" className="relative py-24">
       <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: 'linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(0deg, rgba(255,255,255,0.06) 1px, transparent 1px)', backgroundSize: '48px 48px' }} />
+      <div className="section-morph" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
@@ -46,12 +47,14 @@ export default function Features() {
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {features.map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="group relative rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md hover:bg-white/[0.07] transition-colors">
-              <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-500 via-fuchsia-500 to-amber-400 text-white shadow-[0_10px_30px_-10px_rgba(99,102,241,0.6)]">
-                <Icon size={20} />
+            <div key={title} className="neon-stroke trace-animate rounded-2xl p-[1px] trace-border">
+              <div className="relative rounded-2xl glass-card p-6 hover:bg-white/[0.07] transition-colors">
+                <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-500 via-fuchsia-500 to-amber-400 text-white shadow-[0_10px_30px_-10px_rgba(99,102,241,0.6)]">
+                  <Icon size={20} />
+                </div>
+                <h3 className="text-white font-medium">{title}</h3>
+                <p className="mt-2 text-sm text-slate-300/80">{desc}</p>
               </div>
-              <h3 className="text-white font-medium">{title}</h3>
-              <p className="mt-2 text-sm text-slate-300/80">{desc}</p>
             </div>
           ))}
         </div>
