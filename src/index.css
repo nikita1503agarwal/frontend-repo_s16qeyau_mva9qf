@@ -22,7 +22,24 @@
   }
 }
 
-/* Custom utility classes for shadcn/ui patterns */
+/* Components */
+@layer components {
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+  }
+  .animated-border {
+    position: relative;
+    background: linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.08)) padding-box,
+                conic-gradient(from 90deg, rgba(99,102,241,0.6), rgba(168,85,247,0.6), rgba(245,158,11,0.6), rgba(99,102,241,0.6)) border-box;
+    border: 1px solid transparent;
+  }
+  .glow-orb { @apply pointer-events-none absolute rounded-full blur-3xl opacity-70; }
+  .orb-1 { @apply -top-10 -left-20; width: 480px; height: 480px; background: radial-gradient(circle at center, rgba(99,102,241,0.25), transparent 60%); }
+  .orb-2 { @apply top-1/3 -right-24; width: 420px; height: 420px; background: radial-gradient(circle at center, rgba(168,85,247,0.22), transparent 60%); }
+  .orb-3 { @apply bottom-0 left-1/3; width: 520px; height: 520px; background: radial-gradient(circle at center, rgba(245,158,11,0.18), transparent 60%); }
+}
+
+/* Utilities */
 @layer utilities {
   .animate-in {
     animation-name: animateIn;
