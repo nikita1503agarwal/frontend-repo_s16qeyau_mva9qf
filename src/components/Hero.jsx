@@ -1,7 +1,17 @@
-import { Component, lazy, Suspense } from 'react'
+import { Component, useEffect, useMemo, useState } from 'react'
 
-// Lazy-load Spline; guard with an error boundary so failures don't blank the page
-const Spline = lazy(() => import('@splinetool/react-spline'))
+// Simple WebGL capability check
+function hasWebGL() {
+  try {
+    const canvas = document.createElement('canvas')
+    return !!(
+      window.WebGLRenderingContext &&
+      (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
+    )
+  } catch (e) {
+    return false
+  }
+}
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -22,7 +32,49 @@ class ErrorBoundary extends Component {
   }
 }
 
+function SplineContainer({ scene }) {
+  const [SplineComp, setSplineComp] = useState(null)
+  const [failed, setFailed] = useState(false)
+
+  useEffect(() => {
+    let mounted = true
+    // Gate by WebGL support to avoid import attempts on unsupported devices/browsers
+    if (!hasWebGL()) {
+      setFailed(true)
+      return
+    }
+    import('@splinetool/react-spline')
+      .then(mod => {
+        if (mounted) setSplineComp(() => mod.default || mod)
+      })
+      .catch(() => {
+        if (mounted) setFailed(true)
+      })
+    return () => { mounted = false }
+  }, [])
+
+  if (failed) {
+    return (
+      <div className="w-full h-full grid place-items-center text-white/70">
+        3D preview unavailable — continuing without it
+      </div>
+    )
+  }
+
+  if (!SplineComp) {
+    return (
+      <div className="w-full h-full grid place-items-center text-white/70">
+        Loading 3D preview…
+      </div>
+    )
+  }
+
+  return <SplineComp scene={scene} style={{ width: '100%', height: '100%' }} />
+}
+
 export default function Hero() {
+  const sceneUrl = useMemo(() => 'https://prod.spline.design/4cHQr84zOGAHOehh/scene.splinecode', [])
+
   return (
     <section className="relative min-h-[90vh] pt-28 overflow-hidden">
       <div className="absolute inset-0">
@@ -62,9 +114,7 @@ export default function Hero() {
         <div className="relative h-[520px] lg:h-[680px]">
           <div className="absolute inset-0 rounded-3xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-md">
             <ErrorBoundary>
-              <Suspense fallback={<div className="w-full h-full grid place-items-center text-white/70">Loading 3D preview…</div>}>
-                <Spline scene="https://prod.spline.design/4cHQr84zOGAHOehh/scene.splinecode" style={{ width: '100%', height: '100%' }} />
-              </Suspense>
+              <SplineContainer scene={sceneUrl} />
             </ErrorBoundary>
           </div>
         </div>
