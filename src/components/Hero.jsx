@@ -1,4 +1,26 @@
-import Spline from '@splinetool/react-spline'
+import { Component, lazy, Suspense } from 'react'
+
+// Lazy-load Spline; guard with an error boundary so failures don't blank the page
+const Spline = lazy(() => import('@splinetool/react-spline'))
+
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { hasError: false }
+  }
+  static getDerivedStateFromError() { return { hasError: true } }
+  componentDidCatch() {}
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="w-full h-full grid place-items-center text-white/70">
+          3D preview unavailable — continuing without it
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
 
 export default function Hero() {
   return (
@@ -39,7 +61,11 @@ export default function Hero() {
 
         <div className="relative h-[520px] lg:h-[680px]">
           <div className="absolute inset-0 rounded-3xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-md">
-            <Spline scene="https://prod.spline.design/4cHQr84zOGAHOehh/scene.splinecode" style={{ width: '100%', height: '100%' }} />
+            <ErrorBoundary>
+              <Suspense fallback={<div className="w-full h-full grid place-items-center text-white/70">Loading 3D preview…</div>}>
+                <Spline scene="https://prod.spline.design/4cHQr84zOGAHOehh/scene.splinecode" style={{ width: '100%', height: '100%' }} />
+              </Suspense>
+            </ErrorBoundary>
           </div>
         </div>
       </div>
